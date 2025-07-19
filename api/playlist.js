@@ -1,3 +1,4 @@
+// /api/playlist.js
 import channels from '../../data/channels.json';
 
 const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL;
@@ -12,19 +13,14 @@ export default async function handler(req, res) {
   });
 
   const json = await check.json();
-  if (!json.result) {
-    return res.status(403).send('Token invalid');
-  }
+  if (!json.result) return res.status(403).send('Token expired or invalid');
 
-  // Optional: delete token after use
   await fetch(`${UPSTASH_URL}/del/${token}`, {
     headers: { Authorization: `Bearer ${UPSTASH_TOKEN}` }
   });
 
-  // Build .m3u playlist
   let playlist = '#EXTM3U\n';
-  for (const key in channels) {
-    const ch = channels[key];
+  for (const ch of channels) {
     playlist += `#EXTINF:-1 tvg-id="${ch.name}" tvg-logo="${ch.logo}" group-title="Live", ${ch.name}\n${ch.manifestUri}\n`;
   }
 
