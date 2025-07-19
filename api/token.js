@@ -5,7 +5,7 @@ const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL;
 const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
 
 export default async function handler(req, res) {
-  const ttl = 300000; // 5 minutes in milliseconds
+  const ttl = 3000000; // 5 minutes in milliseconds
   const token = nanoid();
 
   const expiry = Date.now() + ttl;
