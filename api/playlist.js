@@ -1,4 +1,3 @@
-// /api/playlist.js
 import channels from '../../data/channels.json';
 
 const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL;
@@ -13,10 +12,8 @@ export default async function handler(req, res) {
   });
 
   const json = await check.json();
-  const expires = parseInt(json.result);
-
-  if (!expires || Date.now() > expires) {
-    return res.status(403).send('Token expired or invalid');
+  if (!json.result) {
+    return res.status(403).send('Token invalid');
   }
 
   // Optional: delete token after use
